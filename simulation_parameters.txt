@@ -1,0 +1,42 @@
+
+In this appendix we specify the parameters of the simulations referred in this work. Unless specified, the values common to all simulations are:
+	Electron: monoenergetic gamma_0=5000
+	Laser: wavelength = 0.8 micron (omega_p0 = 2.3545e15 is the reference frequency of the simulation), LP, lon_type = "sin2", lon_fall = 50 1/wp
+	Particle information for electrons and photons is saved in RAW files with raw_fraction = 1. Number of azimuthal modes for the quasi3d simulations is 1. Particles per cell is abbreviated as ppc.
+
+CRR
+	CRR Wide Beam quasi3d:
+		Simulation box: x1=[-550, 550] c/wp, x2=[0, 100] c/wp, with grid cells=[5500, 500]
+		Simulation time: dt = 0.02 1/wp, tmax = 320 1/wp
+		Electrons: ppc=20, flat density in x1=[-356, 0] c/wp and x2=[0,80] c/wp
+		Laser: per_type = "gaussian", per_w0 = 18.85 c/wp
+
+	CRR Thin Beam quasi3d:
+		Same as CRRwide, with electron density range x2=[0,5] c/wp
+
+	CRR Short Beam quasi3d: R/W0=1, R/W0=1/2
+		Simulation box: x1=[-150,150] c/wp, x2=[0,100] c/wp, with grid cells=[1500, 500]
+		Simulation time: dt = 0.02 1/wp, tmax = 120 1/wp
+		Electrons: ppc=320, flat density x1=[-50.4, -49.6] c/wp, Gaussian density with radius 13.33 c/wp and 6.67 c/wp for different R/W0
+		Laser: per_type = "gaussian", per_w0 = 18.85 c/wp
+
+QRR
+	QRR PW 1D
+		Simulation box: x1=[0, 200] c/wp with 2500 grid cells
+		Simulation time: dt = 0.021 1/wp, tmax = 130 1/wp
+		Electrons: ppc=4000 for flat density in x1=[5,9] c/wp
+
+	QRR Short Beam quasi3d: R/W0=1/3, R/W0=1, R/W0=3
+		Simulation box: x1=[-150,150] c/wp, x2=[0,100] c/wp, with grid cells=[1500, 500]
+		Simulation time: dt = 0.02 1/wp, tmax = 120 1/wp
+		Electrons: ppc=320, Gaussian density in x2 with radiae 13.33, 26.66 and 39.99 c/wp respectively
+
+	CRR Short Beam 3d Parallel offset: Delta_pll/zR= 1/2 x [0,1,2,3]
+		Simulation box: x1=[-550,550] c/wp, x2=[0,100] c/wp, with grid cells=[5500, 500]
+		Simulation time: dt = 0.02 1/wp, tmax = 120 1/wp
+		Electrons: ppc=320, Gaussian density in x2 with radius 13.33 c/wp, center of beam in x1 direction in multiples of 89 c/wp for different offsets
+
+	CRR Short Beam 3d Perpendicular offset: Delta_prp/R= 1/sqrt(2) x [0,1,2,3]
+		Simulation box: x1=[-150,150] c/wp, x2=[-120,120] c/wp, x3=[-120,120] c/wp, with grid cells=[3000, 1200, 1200]
+		Simulation time: dt = 0.02 1/wp, tmax = 120 1/wp
+		Electrons: ppc=8, flat density x1=[-50.4, -49.6] c/wp, Gaussian density in x2 and x3 with radius 13.33 c/wp, center of beam in x2 direction in multiples of 13.33 c/wp for different offsets
