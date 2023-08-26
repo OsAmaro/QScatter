@@ -1,0 +1,278 @@
+! Óscar Amaro 2023
+! compare solution to Landau-Lifshitz equation in PW with osiris 1D simulation
+
+simulation
+{
+  algorithm = 'qed',
+  omega_p0 = 1.8836e15, ! laser wavelength = 1.0 microns
+}
+
+node_conf
+{
+  node_number(1:1) =  1,
+  if_periodic(1:1) = .false.,
+}
+
+
+!----------spatial grid----------
+grid
+{
+  nx_p(1:1) = 2048,
+  coordinates = "cartesian",
+}
+
+!----------time step and global data dump timestep number----------
+time_step
+{
+  dt =  0.021,
+  ndump =  60,
+}
+
+!----------spatial limits of the simulations----------
+space
+{
+  xmin(1:1) = 0.0,
+  xmax(1:1) = 200.0,
+  if_move(1:1) = .false.,
+}
+
+!----------time limits ----------
+time
+{
+  tmin =  0.00,
+  tmax = 130.00,
+}
+
+el_mag_fld
+{
+  ext_fld = "none",
+  ext_b0(1:3)=0.0d0, ext_e0(1:3)=0.0d0,
+}
+
+!----------boundary conditions for em-fields ----------
+emf_bound
+{
+  type(1:2,1) = "open","open",
+}
+
+!----------emf diagnostics----------
+diag_emf{
+  ndump_fac = 1,
+  ndump_fac_ene_int = 0,
+  reports = "e2","e3",
+}
+
+!----------number of particle species----------
+particles
+{
+  num_qed = 1,
+  interpolation = "cubic",
+}
+
+!----------qed group, setting photon and pair creation----------
+qed_group
+{
+  if_damp_classical = .true.,
+  if_damp_qed = .false.,
+  if_pairprod = .false.,
+  qed_g_cutoff =  1000000.,
+  p_emit_cutoff = 2.0,
+}
+
+!----------qed group, setting diagnostics----------
+qed_group_diag
+{
+  ndump_fac_rad = 0,
+  ndump_fac_pairs = 0,
+  ndump_fac_radspect = 0,
+  ndump_fac_chi_emit = 0,
+}
+
+!----------information for electrons----------
+
+species
+{
+  name = "electrons",
+  num_par_x(1:1) = 10,
+  num_par_max = 1000000,
+  rqm = -1.0,
+  push_type="standard",
+  add_tag = .true.,
+}
+
+udist
+{
+  ufl(1:3) = 2000, 0.0, 0.0,
+  uth(1:3) = 0.0, 0.0, 0.0,
+}
+
+profile
+{
+  density = 1.0d-8,
+  profile_type(1:1)  = "gaussian",
+  gauss_center(1:1)  = 2.00,
+  gauss_sigma(1:1)   = 50.0,
+  gauss_range(1:2,1) = 5.00,9.00,
+}
+
+spe_bound
+{
+  type(1:2,1) = "open","open",
+}
+
+diag_species
+{
+  ndump_fac = 1,
+  ndump_fac_ene = 0,
+  ndump_fac_raw = 1,
+  ndump_fac_pha = 0,
+  !reports = "charge",
+
+!  ps_xmin(1:2) = -4.0, -4.0,
+!  ps_xmax(1:2) =  4.0,  4.0,
+!  ps_nx(1:2)   =  200,  200,
+
+!  ps_pmin(1:3)   = -1.e-5, -1.e-5, -1.e-5,
+!  ps_pmax(1:3)   =  1.e-5,  1.e-5,  1.e-5,
+!  ps_np(1:3)     =    400,    400,    400,
+!  if_ps_p_auto(1:3) = .true., .true., .true.,
+
+!  ps_ngamma   =  1000,
+!  ps_gammamin = 1.0e-5,
+!  ps_gammamax = 1.0e-5,
+!  if_ps_gamma_auto = .true.,
+
+!  phasespaces = "p2p1", "g",
+
+  raw_fraction = 1.00,
+
+}
+
+!----------information for positrons----------
+
+species
+{
+  name = "positrons",
+  num_par_x(1:1) = 1,
+  num_par_max = 1000,
+  rqm = 1.0,
+  push_type="standard",
+  add_tag = .true.,
+}
+
+udist
+{
+  uth(1:3) = 0.0, 0.0, 0.0,
+  ufl(1:3) = 0.0, 0.0, 0.0,
+}
+
+profile
+{
+  density = 0.0,
+}
+
+spe_bound
+{
+	type(1:2,1) = "open","open",
+}
+
+diag_species
+{
+  ndump_fac = 0,
+  !ndump_fac_ene = 1,
+  !ndump_fac_raw = 1,
+  !ndump_fac_pha = 1,
+  !reports = "charge",
+
+!  ps_xmin(1:2) = -4.0, -4.0,
+!  ps_xmax(1:2) =  4.0,  4.0,
+!  ps_nx(1:2)   =  200,  200,
+
+ ! ps_pmin(1:3)   = -1.e-5, -1.e-5, -1.e-5,
+ ! ps_pmax(1:3)   =  1.e-5,  1.e-5,  1.e-5,
+ ! ps_np(1:3)     =    400,    400,    400,
+ ! if_ps_p_auto(1:3) = .true., .true., .true.,
+
+  !ps_ngamma   =  1000,
+  !ps_gammamin = 1.0e-5,
+  !ps_gammamax = 1.0e-5,
+  !if_ps_gamma_auto = .true.,
+
+  !phasespaces = "p2p1", "g",
+
+  raw_fraction = 0.0,
+}
+
+!----------information for photons----------
+
+species
+{
+  name = "photons",
+  num_par_x(1:1) = 1,
+  num_par_max = 150000,
+  push_type = "standard",
+  add_tag = .true.,
+}
+
+udist
+{
+  uth(1:3) = 0.0, 0.0, 0.0,
+  ufl(1:3) = 0.0, 0.0, 0.0,
+}
+
+profile
+{
+  density = 0.0,
+}
+
+spe_bound
+{
+  type(1:2,1) = "open","open",
+}
+
+diag_species
+{
+  ndump_fac = 0,
+  !ndump_fac_ene = 1,
+  !ndump_fac_raw = 1,
+  !ndump_fac_pha = 1,
+  !reports = "charge",
+
+ ! ps_xmin(1:2) = -4.0, -4.0,
+ ! ps_xmax(1:2) =  4.0,  4.0,
+ ! ps_nx(1:2)   =  200,  200,
+
+ ! ps_pmin(1:3)   = -1.e-5, -1.e-5, -1.e-5,
+ ! ps_pmax(1:3)   =  1.e-5,  1.e-5,  1.e-5,
+ ! ps_np(1:3)     =    400,    400,    400,
+ ! if_ps_p_auto(1:3) = .true., .true., .true.,
+
+ ! ps_ngamma   =  1000,
+ ! ps_gammamin = 1.0e-5,
+ ! ps_gammamax = 1.0e-5,
+ ! if_ps_gamma_auto = .true.,
+
+ ! phasespaces = "p2p1", "g",
+
+  raw_fraction = 0.0,
+}
+
+
+! --------------------- laser ---------------
+zpulse
+{
+  a0 = 5.0, ! vary this parameter
+  omega0 = 1.,
+  pol_type = 0, ! linear
+  pol = 0.0, ! p-polarization
+  propagation = "backward",
+  lon_type = "sin2",
+  lon_rise = 50d0,
+  lon_fall = 50d0,
+  lon_flat = 0d0,
+  lon_start = 10d0,
+  per_type = "plane",
+}
+
+! --------------------- end of osiris input file ---------------
+
