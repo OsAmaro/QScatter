@@ -497,6 +497,8 @@ def get_PW_thF(g0,a0,lbd,tau):
 
 def gaunt(chi):
     """
+        gaunt factor
+        
         input: chi
         output: gaunt(chi)
     """
@@ -506,6 +508,8 @@ gaunt = np.vectorize(gaunt)
 
 def d2Pdtdw_q(gg, ge, a0):
     """
+        quantum synchrotron spectrum
+        
         gg - gamma of photon
         gm - gamma of electron
         a0 - local a0
@@ -530,9 +534,15 @@ d2Pdtdw_q = np.vectorize(d2Pdtdw_q)
 
 
 def a_of_phi(a0, phi, n):
+    """
+        laser field value as function of phase
+    """
     return np.abs( a0 * sin(phi/n)**2 * sin(phi) ) * np.heaviside(n*pi-phi,0)
 
 def dgdt(g, t, a0, T, n):
+    """
+        computes semi-classical Larmor Power energy loss (including gaunt factor)
+    """
 
     phi = t*2/pi
 
@@ -544,6 +554,9 @@ def dgdt(g, t, a0, T, n):
     return gaunt(eta) * dpdt/(m_e*c) * T /4.9 # 
     
 def goft(a0, g0, tau_osiris):
+    """
+        solves ODE for average electron energy as a function of laser phase
+    """
     
     t_osiris = np.linspace(0, tau_osiris, 201) # 70
     
@@ -556,21 +569,24 @@ def goft(a0, g0, tau_osiris):
     return t_osiris, sol
 
 def photon_spectrum(gglst, g0, a0, tau_fs):
-
-    tau_osiris = 50 # change this
+    """
+        computes integrated photon spectrum accounting for semi-classical evolution of the average electron energy along the laser pulse
+    """
     
-    lbd = 0.8e-6;
+    lbd = 0.8e-6; # laser wavelength
     T = lbd/c;
-    n = tau_fs*1e-15/T;
-    tau_osiris = tau_fs * (w_p*1e-15)
-    
+    n = tau_fs*1e-15/T; # number of laser cycles
+    tau_osiris = tau_fs * (w_p*1e-15) # laser pulse duration in osiris units
+
+    # solve ODE for average electron energy
     t_osiris, g_phase = goft(a0, g0, tau_osiris)
     g_phase = g_phase.flatten()
 
-    alst = a_of_phi(a0, t_osiris, n)
+    alst = a_of_phi(a0, t_osiris, n) # get laser field value in phase
     
     dNdgg = np.zeros_like(gglst)
     
+    # integrate photon spectrum
     for i in range(len(t_osiris)):
         if alst[i]>1e-3:
             dNdgg = dNdgg + d2Pdtdw_q(gglst, g_phase[i], alst[i]) # g0/(1+g0*9.8492e-05*(a0/12)**2 / 2)
