@@ -34,6 +34,14 @@ QScatter (quick-scattering-toolkit) is a *scientific project*. If you **present 
 
 In alternative, add "Ó. Amaro, M. Vranic, arXiv:2308.09348, 2023" to the references' list of your work. Thank you for your understanding and support!
 
+
+Related repositories
+----------------------
+- Vranic et al 2014 PRL https://github.com/RePlasma/PhysRevLett.113.134801
+- Vranic et al 2016 NJP https://github.com/RePlasma/Vranic_2016_New_J._Phys._18_073035
+- Amaro et al 2021 NJP https://github.com/OsAmaro/distscalarfield
+
+
 Active Developing Team
 ----------------------
 
